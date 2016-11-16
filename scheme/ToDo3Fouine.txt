@@ -1,0 +1,102 @@
+******
+Définition des formes de base
+******
+Points d'attention :
+	> faire des Goto en haut d'éval pour respecter la pile (pas trop d'arguments initialisés pour rien dans la recursivité)
+******
+define
+set!
+if 
+and
+or
+******
+
+1 define 
+	> defini la variable dans l'env actuel
+	> renvoie par convention le symbole de la variable
+	> switch case anx1
+	> renvoie (X) au lieu de X ...
+		> corrigé (besoin d'un car de plus)
+
+1 set! 
+	> renvoie la valeur de ce qui vient d'être défini
+	> redefini une variable au plus proche de l'env
+	> renvoie un msg d'erreur ("Variable %s symbol non définie") sinon
+
+1 if
+	> evaluation de l'entrée et conséquence sur la suite
+	> si pas de csq et #f alors renvoyer #f
+	>> attention aux ordres des CAR et CDR (la ca marche mais pas sur pour plus tard)
+
+1 and
+	> Attention aux CC pour accelerer 
+	> CC si une condition est fausse
+1 or
+	>Attention aux CC
+	> CC si une condition est vraie
+
+******
+
+0/1 IF/AND/OR 
+	> tout sauf 0 vaut true
+	>> long a mettre en place, utilisateur pour un con ...
+	> fait pour le if
+
+1 Eval
+	> Mettre une variable tempo input et un GOTO Switch au lieu du reccursif
+	> fonction Check à la fin qui ne sort que si l'on vient de l'entrée principale
+
+1 Switch_Print
+	> Mettre une variable globale qui contrôle les Prints 
+
+1 Eval 
+	> Utiliser les primitives pour le calcul
+
+1 Eval
+	> flag : change tête
+	> Si une fonction change la tête il faut mettre a jour la var : tempi
+	> cas particulier ou l'entrée standard change (input != tempi s'applique)
+	>> Sortie autorisée sauf si HEAD_CHANGE flag 1
+		> dans ce cas HEAD_CHANGE => 0 et goto Eval_in avec input = Tempi
+	> pas pour IF
+		>En fait si ca marchait ...
+
+0 Env: Suppr ?
+	> voir pk certaines variables ne sont pas suppr lors de la purge 
+
+******
+1 Primitives - char->integer
+	> si le caractère est un entier, il le renvoie dans son format
+	> sinon erreur et quite le programme
+1 primitives - integer->char
+	> ACSIIIIIIIIIII :p
+0 Primitives - number->string
+0 Primitives - string->number
+0 Primitives - symbol->string
+0 Primitives - string->symbol
+...
+
+0 EVAL-Primitives
+	> Evaluer une sous-chaine avant de l'envoyer a traiter dans une primitive
+	>> sera fait dans la fonction ?
+
+0 Symbole Deep avec goto si flag change
+******
+
+ANX1
+	
+	switch case :
+
+	PAIR :
+	
+		si "define" => ENV_Define(symbol, object)
+
+	SYMBOL :
+		rechercher si le symbole existe
+			> existe < evaluer comme son objet lié
+			> !existe < auto-evaluer comme un symbole de même nom
+	INTEGER :
+	PRIMITIVE :
+	BOOLEAN :
+	NIL :
+	CHAR :

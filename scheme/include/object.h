@@ -1,0 +1,83 @@
+
+/**
+ * @file object.h
+ * @author François Cayre <cayre@yiking.(null)>
+ * @date Fri Jun 15 17:49:46 2012
+ * @brief Object definition for SFS.
+ *
+ * Object definition for SFS.
+ */
+
+#ifndef _OBJECT_H_
+#define _OBJECT_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "number.h"
+
+
+typedef struct object_t
+{
+
+    uint type;
+
+    union
+    {
+
+        int              integer;
+        char             character;
+        string           string;
+        string           symbol;
+
+        struct pair_t
+        {
+            struct object_t *car;
+            struct object_t *cdr;
+        }                pair;
+
+        struct object_t *special;
+        struct primitive_t
+        {
+            struct object_t* (*fonction)(struct object_t*);
+        } primitive;
+
+    } this;
+
+} *object;
+
+
+object make_object( uint type );
+object make_nil( void );
+object make_integer ( int Valeur_integer );
+object make_symbol ( char* Valeur_symbol );
+object make_string ( char* Valeur_string );
+object make_character ( char Valeur_character );
+object make_boolean( uint Valeur_boolean);
+object make_pair( object Valeur_car, object Valeur_cdr);
+object make_primitive( object (*Valeur_fonction)(object));
+
+#define SFS_INTEGER      0x00
+#define SFS_CHARACTER    0x01
+#define SFS_STRING       0x02
+#define SFS_PAIR         0x03
+#define SFS_NIL          0x04
+#define SFS_BOOLEAN      0x05
+#define SFS_SYMBOL       0x06
+#define SFS_PRIMITIVE    0x07
+
+extern object nil;
+extern object T;
+extern object F;
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _OBJECT_H_ */
+
+object Car(object Obj); /*Retourne le Car d'un object*/
+object Cdr(object Obj); /*Retourne le Cdr d'un object*/
+
+/* Sortie Verbeuse commandée par la globale VERB_SWITCH */
+void S_Print(char* To_Print);
