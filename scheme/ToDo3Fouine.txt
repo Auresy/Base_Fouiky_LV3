@@ -233,3 +233,23 @@ Let, Let* et map
   (  * z x ))
   
 map application d'une procc a une liste
+
+******
+Session 22/11
+***
+
+Liv 2 :
+	> Auto eval
+Liv 3 :
+	> eq? (egalité object meme evalué)
+Liv 4 :
+	> Modif environements :
+		>> object (pair) ENV_Creer(object Papa)
+		>> Variable dans eval (env en cours)
+		>> MAJ Env_chercher / définir etc ... (aller chercher dans l'env )
+	> Define à MAJ
+	> Begin
+	> Ramasse miettes
+	>
+
+
