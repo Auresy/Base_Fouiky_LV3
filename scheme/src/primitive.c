@@ -85,15 +85,15 @@ void creation_librairie(void)
 
     t=make_primitive( numTostring );
     ENV_definir("number->string", t);
-    /*
-    	t=make_primitive( stringTonum );
-    	ENV_definir("string->number", t);
 
-    	t=make_primitive( symbolTostring );
-    	ENV_definir("symbol->string", t);
+/*      t=make_primitive( stringTonum );
+        ENV_definir("string->number", t);
 
-    	t=make_primitive( stringTosymbol );
-    	ENV_definir("string->symbol", t);
+        t=make_primitive( symbolTostring );
+        ENV_definir("symbol->string", t);
+
+        t=make_primitive( stringTosymbol );
+        ENV_definir("string->symbol", t);
     */
 }
 
@@ -688,40 +688,42 @@ object numTostring(object input)
 /*
 object stringTonum(object input)
 {
-	if ( Car(input)->type != SFS_INTEGER )
-	{
-		printf("Char->integer : Operation impossible ceci n'est pas un SFS_CHARACTER\n"); return NULL;
-	}
+    if ( Car(input)->type != SFS_STRING )
+    {
+        printf("string->number : Operation impossible ceci n'est pas un SFS_STRING\n"); return NULL;
+    }
 
-	else
-	{
-		return( make_integer( atoi( &(input->this.character) ) ) );
-	}
+    else
+    {
+        
+        return(  );
+    }
 }
+
 
 object symbolTostring(object input)
 {
-	if ( Car(input)->type != SFS_INTEGER )
-	{
-		printf("Char->integer : Operation impossible ceci n'est pas un SFS_CHARACTER\n"); return NULL;
-	}
+    if ( Car(input)->type != SFS_INTEGER )
+    {
+        printf("Char->integer : Operation impossible ceci n'est pas un SFS_CHARACTER\n"); return NULL;
+    }
 
-	else
-	{
-		return( make_integer( atoi( &(input->this.character) ) ) );
-	}
+    else
+    {
+        return( make_integer( atoi( &(input->this.character) ) ) );
+    }
 }
 
 object stringTosymbol(object input)
 {
-	if ( Car(input)->type != SFS_INTEGER )
-	{
-		printf("Char->integer : Operation impossible ceci n'est pas un SFS_CHARACTER\n"); return NULL;
-	}
+    if ( Car(input)->type != SFS_INTEGER )
+    {
+        printf("Char->integer : Operation impossible ceci n'est pas un SFS_CHARACTER\n"); return NULL;
+    }
 
-	else
-	{
-		return( make_integer( atoi( &(input->this.character) ) ) );
-	}
+    else
+    {
+        return( make_integer( atoi( &(input->this.character) ) ) );
+    }
 }
 */

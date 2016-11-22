@@ -100,3 +100,136 @@ ANX1
 	BOOLEAN :
 	NIL :
 	CHAR :
+
+******
+TUTO 4
+******
+* Begin ?
+* Lambda, env et aggregats ?
+* Fermeture ?
+* Let et let* ?
+***
+
+Begin
+	> séquence de Sexpr
+	> retourne la dernière Sexppr
+$ (define x 8)
+$ (if ( > x 5 ) (begin (set! x 5) (* x x) ) (- x 5 ) ) <-- If ne peut pas prendre + que deux args -> besoin de Begin
+&&
+$ (begin 1 2 3 )
+==> 3
+&&
+$ (is_begin (Sexpr)) 
+{
+	ret=()
+	expr = cdr(expr)
+	While (expr != nil)
+	{
+		ret = eval(Sexppr)
+		[...]
+	} 	
+}
+
+
+Forme Lambda
+	> Retourne un objet de type PROCEDURE  => newtype :)
+$ (lambda (x) (* x 2)) ->(Forme parametre corps) ->(fonction anonyme, non liée à un symbole), fonction jetable ...
+==> #<procedure>
+
+$ (define x 16)
+$ ((lambda (x) (* x 2 )) 4)
+==> 8
+$ x
+==> 16
+
+Lambda : extension de l'environnement, environnement d'execution de la fonction
+	> environnements imbriqués
+	> un nouvel env pour chaque lambda
+
+*
+à l'execution : 
+				1.> Vérification des arguments
+				2.> Création d'un environnement local
+				3.> Association de l'évaluation du parametre "effectif" au parametre "formel"
+				4.> Execution du corps de la fonction
+				5.> Env papa ==> qui est attaché ?
+
+*
+
+Struct object_t ==> { Proc/compound/aggregat }
+	> Parametre
+	> Body
+	> Env de la déclaration
+struct {
+	struct object_t* param,
+	struct object_t* body,
+	struct object_t* env_papa,
+} Compound
+
+Body et param non évalués
+
+*
+
+Fonctions nommées :
+	> define
+
+$ (define Fois2 (lambda (x) (* 2 x)))
+||
+$ (define (Fois2 x) (* x 2))
+
+/!\ le begin est implicite dans certains cas ...
+
+(define (fact n)
+  (if (< n 2) 1
+    (* n (fact (- n 1) ) )
+    )) <== Fonction factorielle
+$ (fact 3) <== extension de plein d'environnement 
+
+=> Penser au ramasse-miettes ID: par Objet :)
+
+*
+
+Fermeture :
+  > Fonction accompagnée de son environnement lexical
+  > ensemble des variables non locales utilisées dans la fonction
+  > pas de fermeture en C (pas fait pour) 
+ex. C
+void* Compte(int total)
+{
+  int incre(int inc) { total += inc; return total;}
+  return incre;
+}
+void main() 
+{
+  (* compteur ) (int) = compte(10);
+  printf("%d",compteur(3));
+}
+==> n'affiche pas 13 car Total n'existe plus (sauf si global...)
+Pb de pile, limite du C
+
+(define compteur
+  (( lambda (total)
+    (lambda (inc)
+      (set! total (+ total inc)
+      total ))
+    10)
+)
+==> ca ca marche
+  > param : total
+  > env   : corps
+  > corps : Tout de (lambda (inc) ... total ))
+
+***
+
+Let, Let* et map
+
+( let ( (x 2) (y 3)) (* x y)) ==> 6
+  > On reutilise lambda
+  $ (( lambda (x y) (* x y)) 2 3)
+  
+  let* : evaluation dans l'autre sens (gauche droite) contrairement au let (droite gauche)
+
+(lambda () (define x 7) define z ( + x y )) 
+  (  * z x ))
+  
+map application d'une procc a une liste
