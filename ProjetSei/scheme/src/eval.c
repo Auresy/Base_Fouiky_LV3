@@ -26,6 +26,8 @@ object sfs_eval_Prim( object input )
     return(input);
 }
 
+
+
 object sfs_eval( object input )
 {
     /*
@@ -66,8 +68,11 @@ EVAL_in :
                 }
             }
 
-
-
+             /* cas Quote ou ' */
+            if( !strcmp(Car(input)->this.symbol, "quote"))
+            {
+                return(Car(Cdr(input)));
+            }
 
             /* cas DEFINE et SET! */
             if( !strcmp(Car(input)->this.symbol, "define") || !strcmp(Car(input)->this.symbol, "set!") )

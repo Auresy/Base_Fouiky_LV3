@@ -239,19 +239,20 @@ Session 22/11
 ***
 
 Liv 2 :
-	> Auto eval
-	> If 1er evaluant
+1	> Auto eval
+1	> If 1er evaluant
 Liv 3 :
-	> eq? (egalité object meme evalué)
-	> Primtives Type
+0	> eq? (egalité object meme evalué)
+0	> Primtives Type
 Liv 4 :
-	> Modif environements :
+0	> Modif environements :
 		>> object (pair) ENV_Creer(object Papa)
 		>> Variable dans eval (env en cours)
 		>> MAJ Env_chercher / définir etc ... (aller chercher dans l'env )
-	> Define à MAJ
-	> Begin
-	> Ramasse miettes
-	>
+0	> Define à MAJ
+0	> Begin
+0	> Ramasse miettes
+	> ...
 
 
+***
