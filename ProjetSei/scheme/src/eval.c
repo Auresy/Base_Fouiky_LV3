@@ -221,6 +221,18 @@ EVAL_in :
                     return(F);
                 }
             }
+            /* cas begin */
+            if( !strcmp(Car(input)->this.symbol, "begin") )
+            {
+                object ret=make_nil();
+                input = Cdr(input);
+                while ( input->type != SFS_NIL )
+                {
+                    ret = sfs_eval(Car(input));
+                    input = Cdr( input );
+                }
+                return ret;
+            }
             printf("SFS_PAIR : Eval, Commande introuvable\n");
             return(NULL);
             break;

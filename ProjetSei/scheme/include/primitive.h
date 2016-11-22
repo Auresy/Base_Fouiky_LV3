@@ -21,6 +21,7 @@ object predicatchar(object input);
 object predicatstring(object input);
 object predicatpair(object input);
 object predicatprocedure(object input);
+object predicatequal(object input);
 
 object cons(object input);
 object primitivecar(object input);

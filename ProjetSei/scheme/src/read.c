@@ -454,7 +454,7 @@ object sfs_read_atom( char *input, uint *here )
                 else
                 {
                     printf("ERREUR read_atom, verifiez la syntaxe\n");
-                    exit( EXIT_FAILURE );
+                    return NULL;
                 }
     }
 
@@ -494,19 +494,19 @@ object sfs_read_boolean(char *input, uint *here )
 
                 else
                 {
-                    /*printf("ERREUR read boolean");*/ exit( EXIT_FAILURE );
+                    /*printf("ERREUR read boolean");*/ return NULL;
                 }
         }
 
         else
         {
-            /*printf("ERREUR read boolean");*/ exit( EXIT_FAILURE );
+            /*printf("ERREUR read boolean");*/ return NULL;
         }
     }
 
     else
     {
-        /*printf("ERREUR read boolean");*/ exit( EXIT_FAILURE );
+        /*printf("ERREUR read boolean");*/ return NULL;
     }
 
 }
@@ -540,7 +540,7 @@ object sfs_read_character( char *input, uint *here )
                 return t;
             }
 
-    /*printf("ERREUR read character, verifiez votre syntaxe\n");*/ exit( EXIT_FAILURE );
+    /*printf("ERREUR read character, verifiez votre syntaxe\n");*/ return NULL;
 }
 
 object sfs_read_string( char *input, uint *here )  /*on risque d'avoir des pbs de taille a cause de la concaténation*/
@@ -564,7 +564,7 @@ object sfs_read_string( char *input, uint *here )  /*on risque d'avoir des pbs d
     else
     {
         printf("ERREUR read string, verifiez votre syntaxe\n");
-        exit( EXIT_FAILURE );
+        return NULL;
     }
 }
 
@@ -585,7 +585,7 @@ object sfs_read_integer( char *input, uint *here )
     if ( ( input[*here] == '+' || input[*here] == '-' ) && ( input[*here+1] == '+' || input[*here+1] == '-' ) )
     {
         printf("ERREUR read integer, verifiez votre syntaxe\n");
-        exit( EXIT_FAILURE );
+        return NULL;
     }
 
     while ( !(input[( *here )+i] == ' ') && (*here + i) < (int)strlen(input) && !(input[( *here )+i] == ')'))
@@ -601,7 +601,7 @@ object sfs_read_integer( char *input, uint *here )
         else
         {
             printf("ERREUR read integer, verifiez votre syntaxe\n");
-            exit( EXIT_FAILURE );
+            return NULL;
         }
     }
 
@@ -623,7 +623,7 @@ object sfs_read_symbol( char *input, uint *here )
         if ( (int)input[*here+a]==34 )
         {
             printf("ERREUR read symbol, verifiez votre syntaxe\n");
-            exit( EXIT_FAILURE );
+            return NULL;
         }
 
         a+=1;

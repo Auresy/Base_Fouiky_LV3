@@ -57,6 +57,9 @@ void creation_librairie(void)
     t=make_primitive( predicatprocedure );
     ENV_definir("procedure?", t);
 
+    t=make_primitive( predicatequal );
+    ENV_definir("eq?", t);
+
     t=make_primitive( cons );
     ENV_definir("cons", t);
 
@@ -574,6 +577,87 @@ object predicatprocedure(object input)
     return T;
 }
 
+object predicatequal(object input)
+{
+    object input1 = Car(input);
+    object input2 = Car(Cdr(input));
+    if (input1->type != input2->type)
+    {
+        printf("predicatequal : Types différents\n");
+        return (NULL);
+    }
+    if (input1->type == SFS_INTEGER)
+    {
+        if ( input1->this.integer == input2->this.integer )
+        {
+            return(T);
+        }
+        else return(F);
+    }
+    if (input1->type == SFS_CHARACTER)
+    {
+        if ( input1->this.character == input2->this.character )
+            {
+                return(T);
+            }
+        else return(F);
+    }
+    if (input1->type == SFS_STRING)
+    {
+        if ( strcmp(input1->this.string, input2->this.string) )
+            {
+                return(F);
+            }
+        else return(T);
+    }
+    if (input1->type == SFS_PAIR)
+    {
+        if ( Car(input1) == Car(input2) && Cdr(input1) == Cdr(input2) )
+            {
+                return(T);
+            }
+        else return(F);
+    }
+    if (input1->type == SFS_NIL)
+    {
+        if (input2->type == SFS_NIL)
+        {
+            return(T);
+        }
+        else return(F);
+    }
+    if (input1->type == SFS_BOOLEAN)
+    {
+        if ( input2 == input1 )
+        {
+            return(T);
+        }
+        else return(F);
+    }
+    if (input1->type == SFS_SYMBOL)
+    {
+        if ( strcmp(input1->this.symbol, input2->this.symbol) )
+            {
+                return(F);
+            }
+        else return(T);
+    }
+    if (input1->type == SFS_PRIMITIVE)
+    {
+        if ( input1->this.primitive.fonction == input2->this.primitive.fonction )
+            {
+                return(T);
+            }
+        else return(F);
+    }
+    if (input1->type == SFS_COMPOUND)
+    {
+        printf("Ca Marche pas encore :) \n");
+    }
+    printf("EQ? pas traitable\n");
+    return(NULL);
+}
+
 /* Manipulation de liste */
 
 object cons(object input)
@@ -664,7 +748,7 @@ object list(object input)
 
 object qtype (object input)
 {
-    printf("\nSFS_INTEGER      0x00\nSFS_CHARACTER    0x01\nSFS_STRING       0x02\nSFS_PAIR         0x03\nSFS_NIL          0x04\nSFS_BOOLEAN      0x05\nSFS_SYMBOL       0x06\nSFS_PRIMITIVE    0x07\n");
+    printf("\nSFS_INTEGER      0x00\nSFS_CHARACTER    0x01\nSFS_STRING       0x02\nSFS_PAIR         0x03\nSFS_NIL          0x04\nSFS_BOOLEAN      0x05\nSFS_SYMBOL       0x06\nSFS_PRIMITIVE    0x07\nSFS_COMPOUND     0x08\n");
     printf("\n          %d\n\n", sfs_eval( Car(input) )->type );
     return(input);
 }
