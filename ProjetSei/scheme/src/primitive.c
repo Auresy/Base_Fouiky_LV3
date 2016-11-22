@@ -54,6 +54,9 @@ void creation_librairie(void)
     t=make_primitive( predicatpair );
     ENV_definir("pair?", t);
 
+    t=make_primitive( predicatprocedure );
+    ENV_definir("procedure?", t);
+
     t=make_primitive( cons );
     ENV_definir("cons", t);
 
@@ -72,7 +75,7 @@ void creation_librairie(void)
     t=make_primitive( list );
     ENV_definir("list", t);
 
-    /*Fouiny*/
+    /*FouinyBaby*/
 
     t=make_primitive( qtype );
     ENV_definir("type", t);
@@ -536,6 +539,32 @@ object predicatpair(object input)
         input=Cdr(input);
 
         if (Car(input)->type != SFS_PAIR)
+        {
+            return F;
+        }
+
+    }
+
+    return T;
+}
+
+object predicatprocedure(object input)
+{
+    if (input->type == SFS_COMPOUND) return T;
+
+    else
+        if (input->type != SFS_PAIR) return F;
+
+    if (Car(input)->type != SFS_COMPOUND)
+    {
+        return F;
+    }
+
+    while ( Cdr(input)->type != SFS_NIL )
+    {
+        input=Cdr(input);
+
+        if (Car(input)->type != SFS_COMPOUND)
         {
             return F;
         }

@@ -42,6 +42,12 @@ typedef struct object_t
         {
             struct object_t* (*fonction)(struct object_t*);
         } primitive;
+        struct compound_t
+        {
+            struct object_t* param;
+            struct object_t* body;
+            struct object_t* env;
+        } compound;
 
     } this;
 
@@ -54,9 +60,11 @@ object make_integer ( int Valeur_integer );
 object make_symbol ( char* Valeur_symbol );
 object make_string ( char* Valeur_string );
 object make_character ( char Valeur_character );
-object make_boolean( uint Valeur_boolean);
-object make_pair( object Valeur_car, object Valeur_cdr);
-object make_primitive( object (*Valeur_fonction)(object));
+object make_boolean( uint Valeur_boolean );
+object make_pair( object Valeur_car, object Valeur_cdr );
+object make_primitive( object (*Valeur_fonction)(object) );
+object make_compound( object param, object body, object env );
+
 
 #define SFS_INTEGER      0x00
 #define SFS_CHARACTER    0x01
@@ -66,6 +74,7 @@ object make_primitive( object (*Valeur_fonction)(object));
 #define SFS_BOOLEAN      0x05
 #define SFS_SYMBOL       0x06
 #define SFS_PRIMITIVE    0x07
+#define SFS_COMPOUND     0x08
 
 extern object nil;
 extern object T;

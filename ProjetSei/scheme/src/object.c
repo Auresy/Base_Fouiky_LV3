@@ -131,6 +131,20 @@ object make_primitive( object (*Valeur_fonction)(object))
     return t;
 }
 
+object make_compound( object Valeur_param, object Valeur_body, object Valeur_env )
+{
+    object t = make_object ( SFS_COMPOUND );
+
+    t->this.compound.param=Valeur_param;
+    t->this.compound.body=Valeur_body;
+    t->this.compound.env=Valeur_env;
+
+    if (0 && VERB_SWITCH)
+        printf("make_compound : NEW %p\n",t );
+
+    return t;
+}
+
 object Car(object Obj)
 {
     return(Obj->this.pair.car);

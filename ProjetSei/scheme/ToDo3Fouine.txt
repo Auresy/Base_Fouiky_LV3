@@ -240,8 +240,10 @@ Session 22/11
 
 Liv 2 :
 	> Auto eval
+	> If 1er evaluant
 Liv 3 :
 	> eq? (egalité object meme evalué)
+	> Primtives Type
 Liv 4 :
 	> Modif environements :
 		>> object (pair) ENV_Creer(object Papa)

@@ -27,7 +27,7 @@ $ ./scheme monFichier.scm
 $ ./scheme tests/02_readint.scm
 
 --- pour lancer le programme de test sur l'ensemble des fichiers de tests_step0 en mode batch (non interactif)
-$ ../testing/simpleUnitTest.sh -b -e ./scheme tests_step1/simple/*.scm
+$ ../testing/simpleUnitTest.sh -b -e ./scheme tests_step3/*.scm
 
 --- pour créer l'archive à envoyer au profs (cela vous créé un tgz avec votre nom et la date)
 $ make tarball
