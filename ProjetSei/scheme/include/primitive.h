@@ -20,6 +20,7 @@ object predicatinteger(object input);
 object predicatchar(object input);
 object predicatstring(object input);
 object predicatpair(object input);
+object predicatprocedure(object input);
 
 object cons(object input);
 object primitivecar(object input);
@@ -32,8 +33,9 @@ object qtype(object input);
 object charToint(object input);
 object intTochar(object input);
 object numTostring(object input);
-/*
+
 object stringTonum(object input);
+/*
 object symbolTostring(object input);
 object stringTosymbol(object input);
 */

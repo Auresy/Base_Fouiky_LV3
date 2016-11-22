@@ -214,8 +214,7 @@ int main ( int argc, char *argv[] )
             if (VERB_SWITCH)
                 printf("Fin session utilisateur \n");
 
-            /*ENV_purifier();*/
-            printf("Purifier HS\n");
+            ENV_purifier();
             exit(EXIT_SUCCESS);
         }
 

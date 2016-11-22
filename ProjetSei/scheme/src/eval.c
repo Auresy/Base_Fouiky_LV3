@@ -15,6 +15,17 @@
 
 extern int VERB_SWITCH;
 
+object sfs_eval_Prim( object input )
+{
+    object Temp_List = input;
+    while(Temp_List != nil)
+    {
+        Temp_List->this.pair.car = sfs_eval( Car( Temp_List ) );
+        Temp_List = Cdr(Temp_List);
+    }
+    return(input);
+}
+
 object sfs_eval( object input )
 {
     /*
@@ -44,14 +55,14 @@ EVAL_in :
 
                 if ( Temp1->type == SFS_PRIMITIVE )
                 {
-                    return( Temp1->this.primitive.fonction(Cdr(input)) );
+                    return( Temp1->this.primitive.fonction( sfs_eval_Prim ( Cdr(input)) ) );
                 }
 
                 Temp1 = ENV_chercher( sfs_eval( Car(input) )->this.symbol );
 
                 if ( Temp1->type == SFS_PRIMITIVE )
                 {
-                    return( Temp1->this.primitive.fonction(sfs_eval( Cdr(input) ) ) );
+                    return( Temp1->this.primitive.fonction(sfs_eval_Prim( Cdr(input) ) ) );
                 }
             }
 
@@ -210,18 +221,8 @@ EVAL_in :
                     return(F);
                 }
             }
-
-            /*Cas Liste*/
-            object Temp_List = input;
-            while(Temp_List != nil)
-            {
-                Temp_List->this.pair.car = sfs_eval( Car( Temp_List ) );
-                Temp_List = Cdr(Temp_List);
-            }
-            return(input);
-
             printf("SFS_PAIR : Eval, Commande introuvable\n");
-            exit(EXIT_FAILURE);
+            return(NULL);
             break;
 
         case SFS_PRIMITIVE :

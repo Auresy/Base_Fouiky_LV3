@@ -181,6 +181,11 @@ void ENV_supprimer(char* Symbole) /*Supprime et libère la memoire pour le symbo
 
 void ENV_purifier() /*libère l'environement en supprimant toutes les variables puis en detruisant la tête*/
 {
+    printf("ENV_purifier : Purifier HS\n");
+    
+    if (0)
+    {
+
     /*suppression tant que non vide*/
     object Pt = ENV_TETE;
 
@@ -194,6 +199,9 @@ void ENV_purifier() /*libère l'environement en supprimant toutes les variables 
 
     if (VERB_SWITCH)
         printf("PURIFIED\n");
+
+    } /* HS */
+
 }
 
 void ENV_List() /*Liste les variables déclarées dans l'environnement*/
