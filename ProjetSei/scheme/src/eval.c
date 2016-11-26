@@ -20,7 +20,9 @@ object sfs_eval_Prim( object input )
     object Temp_List = input;
     while(Temp_List != nil)
     {
-        Temp_List->this.pair.car = sfs_eval( Car( Temp_List ) );
+        object ErrDetect = sfs_eval( Car( Temp_List ) );
+        if (ErrDetect == NULL) return(NULL);
+        Temp_List->this.pair.car = ErrDetect ;
         Temp_List = Cdr(Temp_List);
     }
     return(input);
@@ -59,7 +61,7 @@ EVAL_in :
                 {
                     return( Temp1->this.primitive.fonction( sfs_eval_Prim ( Cdr(input)) ) );
                 }
-
+                if (Temp1 != nil)
                 Temp1 = ENV_chercher( sfs_eval( Car(input) )->this.symbol );
 
                 if ( Temp1->type == SFS_PRIMITIVE )
@@ -80,13 +82,13 @@ EVAL_in :
                 if ( Car(Cdr(input))->type != SFS_SYMBOL )
                 {
                     printf("ERREUR sfs_eval : seul les symboles peuvent être define ou set!\n");
-                    exit(EXIT_FAILURE);
+                    return(NULL);
                 }
 
                 if ( !strcmp(Car(input)->this.symbol, "set!") && !ENV_est_defini(Car(Cdr(input))->this.symbol) )
                 {
                     printf("ERREUR sfs_eval : Une variable non définie ne peut être set!\n");
-                    exit(EXIT_FAILURE);
+                return(NULL);
                 }
 
                 else
@@ -254,10 +256,11 @@ EVAL_in :
 
             if(Obj1 == nil)
             {
-                if (VERB_SWITCH)
+                if (1)
+                {
                     printf("SFS_SYMBOL : Erreur Variable non définie\n");
-
-                return(input);
+                    return(NULL);
+                }
             }
 
             else
@@ -283,8 +286,7 @@ EVAL_in :
             return(input);
 
         default :
-            printf("non evalué\n");
-            return(nil);
+            printf("Eval.c : FATAL non evaluable\n");
             exit(EXIT_FAILURE);
 
 

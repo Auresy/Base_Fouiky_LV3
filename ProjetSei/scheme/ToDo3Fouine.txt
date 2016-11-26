@@ -37,7 +37,7 @@ or
 
 ******
 
-0/1 IF/AND/OR 
+1 IF/AND/OR 
 	> tout sauf 0 vaut true
 	>> long a mettre en place, utilisateur pour un con ...
 	> fait pour le if
@@ -61,7 +61,7 @@ or
 	> pas pour IF
 		>En fait si ca marchait ...
 
-0 Env: Suppr ?
+X Env: Suppr ?
 	> voir pk certaines variables ne sont pas suppr lors de la purge 
 
 ******
@@ -76,11 +76,11 @@ or
 0 Primitives - string->symbol
 ...
 
-0 EVAL-Primitives
+1 EVAL-Primitives
 	> Evaluer une sous-chaine avant de l'envoyer a traiter dans une primitive
 	>> sera fait dans la fonction ?
 
-0 Symbole Deep avec goto si flag change
+X Symbole Deep avec goto si flag change
 ******
 
 ANX1
@@ -242,7 +242,7 @@ Liv 2 :
 1	> Auto eval
 1	> If 1er evaluant
 Liv 3 :
-0	> eq? (egalité object meme evalué)
+1	> eq? (egalité object meme evalué)
 0	> Primtives Type
 Liv 4 :
 0	> Modif environements :

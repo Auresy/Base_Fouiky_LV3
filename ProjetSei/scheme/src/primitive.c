@@ -579,6 +579,11 @@ object predicatprocedure(object input)
 
 object predicatequal(object input)
 {
+    if (input == NULL)
+    {
+        printf("Eq? : variable indéfinie détéctée\n");
+        return(NULL);
+    }
     object input1 = Car(input);
     object input2 = Car(Cdr(input));
     if (input1->type != input2->type)

@@ -28,7 +28,7 @@ void ENV_init() /*Initialise les variables d'environement SCHEME et la globale o
     }
 
 
-    /* création d'une librairie de primitives */
+    /* création d'une librairie de primitives standard*/
 
     creation_librairie();
 
