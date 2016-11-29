@@ -240,6 +240,35 @@ EVAL_in :
                 }
                 return ret;
             }
+            /* cas lambda */
+            if( !strcmp(Car(input)->this.symbol, "lambda") )
+            {
+                /* verif des args */
+                if ( Cdr(input)->type == SFS_PAIR && Car(Cdr(input))->type == SFS_PAIR && Cdr(Cdr(input))->type == SFS_PAIR)
+                {
+                    object ret2 = Car(Cdr(input));
+                    while ( ret2->type != SFS_PAIR )
+                    {
+                        /* verifier que l'on a bien des paramètres formels (symbols) */
+                        if ( ret2->type != SFS_SYMBOL )
+                        {
+                            printf("Le premier argument de la forme lambda est un(des) paramètre(s) (symbol)");
+                            return NULL;
+                        }
+                        ret2 = Cdr(ret2);
+                    }
+
+                }
+
+                /* création d'un environnement local */
+
+                /* association de l'évaluation du paramètre effectif au paramètre formel */
+
+                /* exec du corps de la fonction */
+                
+                printf("Il manque des arguments a la forme lambda\n");
+                return(NULL);
+            }
             printf("SFS_PAIR : Eval, Commande introuvable\n");
             return(NULL);
             break;
