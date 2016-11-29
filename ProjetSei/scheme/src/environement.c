@@ -34,6 +34,19 @@ void ENV_init() /*Initialise les variables d'environement SCHEME et la globale o
 
 }
 
+void ENV_NewEnv(void* papa) /*Prépare un nouvel environnement qui pointe vers son papa*/
+{
+    object Ne = ENV_maillon();
+    Ne->this.pair.car = papa;
+
+    if (VERB_SWITCH)
+    {
+        printf("ENV_NewEnv: Nouvel arrivant !\n");
+        printf("%p\n", Ne );
+    }
+
+}
+
 
 void ENV_definir(char* Symbole, object Obj) /*Associe une chaine "Symbole" à un objet*/
 {

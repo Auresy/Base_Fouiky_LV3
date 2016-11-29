@@ -2,6 +2,7 @@
 
 
 object ENV_maillon(); /*Alloue un maillon pour l'environement*/
+void ENV_NewEnv(void* papa);
 void ENV_init(); /*Initialise les variables d'environement SCHEME et la globale object* "ENV_TETE"*/
 void ENV_definir(char* Symbole, object Obj); /*Associe une chaine "Symbole" à un objet*/
 void ENV_redefinir(char* Symbole, object Obj); /*Supprime et redefini <=> ENV_supprimer + ENV_defnir*/
