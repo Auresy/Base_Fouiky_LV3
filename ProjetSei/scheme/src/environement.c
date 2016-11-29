@@ -130,6 +130,11 @@ object ENV_chercher( char* Symbole ) /*Renvoie l'objet associé à la chaîne Sy
             if (VERB_SWITCH)
                 printf("ENV_chercher : %s trouvé\n", Symbole);
 
+            if ( Car(Cdr(Pt))->type == SFS_SYMBOL && ENV_chercher( Car(Cdr(Pt))->this.symbol ) != NULL )
+            {
+                return ( ENV_chercher( Car(Cdr(Pt))->this.symbol ) );
+            }
+
             return (Car(Cdr(Pt)));
         }
     }
@@ -139,7 +144,7 @@ object ENV_chercher( char* Symbole ) /*Renvoie l'objet associé à la chaîne Sy
 
     /*printf("ERREUR ENV_chercher, recherche infructueuse\n");
     exit( EXIT_FAILURE );*/
-    return(nil);
+    return(NULL);
 
 }
 

@@ -245,6 +245,8 @@ Liv 3 :
 1	> eq? (egalité object meme evalué)
 0	> Primtives Type
 Liv 4 :
+0 	> READ_Primitive
+0	> READ_Compound
 0	> Modif environements :
 		>> object (pair) ENV_Creer(object Papa)
 		>> Variable dans eval (env en cours)

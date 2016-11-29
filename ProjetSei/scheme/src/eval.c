@@ -57,14 +57,14 @@ EVAL_in :
             {
                 object Temp1 = ENV_chercher(Car(input)->this.symbol);
 
-                if ( Temp1->type == SFS_PRIMITIVE )
+                if ( Temp1 != NULL && Temp1->type == SFS_PRIMITIVE )
                 {
                     return( Temp1->this.primitive.fonction( sfs_eval_Prim ( Cdr(input)) ) );
                 }
-                if (Temp1 != nil)
+                if (Temp1 != NULL)
                 Temp1 = ENV_chercher( sfs_eval( Car(input) )->this.symbol );
 
-                if ( Temp1->type == SFS_PRIMITIVE )
+                if ( Temp1 != NULL && Temp1->type == SFS_PRIMITIVE )
                 {
                     return( Temp1->this.primitive.fonction(sfs_eval_Prim( Cdr(input) ) ) );
                 }
@@ -87,13 +87,13 @@ EVAL_in :
                 }
                 if ( Car(Cdr(input))->type != SFS_SYMBOL )
                 {
-                    printf("ERREUR sfs_eval : seul les symboles peuvent être define ou set!\n");
+                    printf("ERREUR sfs_eval : Type, Seul les symboles peuvent être define ou set!\n");
                     return(NULL);
                 }
 
                 if ( !strcmp(Car(input)->this.symbol, "set!") && !ENV_est_defini(Car(Cdr(input))->this.symbol) )
                 {
-                    printf("ERREUR sfs_eval : Une variable non définie ne peut être set!\n");
+                    printf("ERREUR sfs_eval : Type, Une variable non définie ne peut être set!\n");
                 return(NULL);
                 }
 
@@ -126,21 +126,22 @@ EVAL_in :
                 {
                     if( Car(Cdr(input)) == T )
                     {
-                        return(Car(Cdr(Cdr(input))));
+                        input = Car(Cdr(Cdr(input)));
                     }
 
                     else
                     {
                         if(Cdr(Cdr(Cdr(input)))->type == SFS_PAIR )
                         {
-                            return(Car(Cdr(Cdr(Cdr(input)))));
+                            input = Car(Cdr(Cdr(Cdr(input))));
                         }
 
                         else
                         {
-                            return(F);
+                            input = F;
                         }
                     }
+                    goto EVAL_in ;
                 }
             }
 
@@ -289,7 +290,7 @@ EVAL_in :
 
             object Obj1 = ENV_chercher(input->this.symbol);
 
-            if(Obj1 == nil)
+            if(Obj1 == NULL)
             {
                 if (1)
                 {
