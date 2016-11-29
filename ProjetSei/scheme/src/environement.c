@@ -4,6 +4,7 @@
 #include "string.h"
 #include "mem.h"
 #include "primitive.h"
+#include "eval.h"
 
 extern object ENV_TETE;
 extern int VERB_SWITCH;

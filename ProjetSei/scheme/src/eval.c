@@ -14,6 +14,7 @@
 #include "primitive.h"
 
 extern int VERB_SWITCH;
+extern object ENV_TETE;
 
 object sfs_eval_Prim( object input )
 {
@@ -250,29 +251,50 @@ EVAL_in :
             /* cas lambda */
             if( !strcmp(Car(input)->this.symbol, "lambda") )
             {
-                /* verif des args */
-                if ( Cdr(input)->type == SFS_PAIR && Car(Cdr(input))->type == SFS_PAIR && Cdr(Cdr(input))->type == SFS_PAIR)
-                {
-                    object ret2 = Car(Cdr(input));
-                    while ( ret2->type != SFS_PAIR )
-                    {
-                        /* verifier que l'on a bien des paramètres formels (symbols) */
-                        if ( ret2->type != SFS_SYMBOL )
-                        {
-                            printf("Le premier argument de la forme lambda est un(des) paramètre(s) (symbol)");
-                            return NULL;
-                        }
-                        ret2 = Cdr(ret2);
-                    }
+                /* création d'un coumpound */
+                return make_compound( Car(Cdr(input)), Car(Cdr(Cdr(input))), ENV_TETE );
 
+            }
+            /* Cas PAIR */
+            if ( Car(input)->type == SFS_PAIR )
+            {
+                object t = sfs_eval( Car(input) );
+                object t2 = sfs_eval( Cdr(input) );
+                return sfs_eval(make_pair(t, t2));
+            }
+            /* Cas compound */
+            if ( Car(input)->type == SFS_COMPOUND)
+            {
+                /* verif des args */
+                object ret1 = Cdr(input);
+                object ret2 = Car(input)->this.compound.param;
+                while ( ret1->type != SFS_PAIR && ret1->type != SFS_PAIR)
+                {
+                    /* verifier que l'on a bien des paramètres formels (symbols) */
+                    if ( ret1->type != SFS_SYMBOL )
+                    {
+                         printf("Le premier argument de la forme lambda est un(des) paramètre(s) (symbol)");
+                        return NULL;
+                      }
+                    ret2 = Cdr(ret2);
+                    ret1 = Cdr(ret1);
                 }
+
+            
 
                 /* création d'un environnement local */
 
                 /* association de l'évaluation du paramètre effectif au paramètre formel */
-
+                object ret_param_form = Car(Cdr(Car(input)));
+                object ret_param_eff = Cdr(input);
+                    while ( ret_param_form->type != SFS_PAIR && ret_param_eff->type != SFS_PAIR)
+                    {
+                        ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff)); /* a modifier avec l'ENV*/
+                        ret_param_form = Cdr(ret_param_form);
+                        ret_param_eff = Cdr(ret_param_eff);
+                    }
                 /* exec du corps de la fonction */
-                
+
                 printf("Il manque des arguments a la forme lambda\n");
                 return(NULL);
             }
