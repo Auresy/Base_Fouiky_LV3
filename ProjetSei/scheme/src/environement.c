@@ -71,10 +71,26 @@ void ENV_definir(char* Symbole, object Obj) /*Associe une chaine "Symbole" à un
 }
 
 
-void ENV_redefinir(char* Symbole, object Obj) /*Supprime et redefini <=> ENV_supprimer + ENV_definir*/
+void ENV_redefinir(char* Symbole, object Obj) /*recherche puis change le car de l'hote mémoire*/
 {
-    ENV_supprimer(Symbole);
-    ENV_definir(Symbole, Obj);
+    object Pt = ENV_TETE;
+    int i = 1;
+    while(Car(Pt) != NULL && i)
+    {
+        Pt = Car(Pt);
+
+        if( !strcmp( Cdr(Cdr(Pt))->this.symbol, Symbole) )
+        {
+            if (VERB_SWITCH)
+                printf("ENV_redefinir : %s trouvé\n", Symbole);
+
+            Pt->this.pair.cdr->this.pair.car = Obj;
+            i = 0;
+        }
+    }
+
+    if(VERB_SWITCH && i)
+        printf(" ENV_redefinir : %s pas trouvé, non redefini\n", Symbole);
 }
 
 
@@ -119,7 +135,7 @@ object ENV_chercher( char* Symbole ) /*Renvoie l'objet associé à la chaîne Sy
     }
 
     if(VERB_SWITCH)
-        printf(" ENV_chercher : %s pas trouvé\n", Symbole);
+        printf("ENV_chercher : %s pas trouvé\n", Symbole);
 
     /*printf("ERREUR ENV_chercher, recherche infructueuse\n");
     exit( EXIT_FAILURE );*/

@@ -79,6 +79,12 @@ EVAL_in :
             /* cas DEFINE et SET! */
             if( !strcmp(Car(input)->this.symbol, "define") || !strcmp(Car(input)->this.symbol, "set!") )
             {
+                if( Cdr(input) == nil || Cdr(Cdr(Cdr(input))) != nil )
+                {
+                    printf("ERREUR sfs_eval : Arguments define-set! incorrects\n");
+                    return(NULL);
+                   
+                }
                 if ( Car(Cdr(input))->type != SFS_SYMBOL )
                 {
                     printf("ERREUR sfs_eval : seul les symboles peuvent être define ou set!\n");
