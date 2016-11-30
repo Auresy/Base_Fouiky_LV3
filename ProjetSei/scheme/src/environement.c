@@ -35,39 +35,38 @@ void ENV_init() /*Initialise les variables d'environement SCHEME et la globale o
 
 }
 
-void ENV_NewEnv(void* papa) /*Prépare un nouvel environnement qui pointe vers son papa*/
+object ENV_NewEnv(object papa) /*Prépare un nouvel environnement qui pointe vers son papa*/
 {
     object Ne = ENV_maillon();
-    Ne->this.pair.car = papa;
+    Ne->this.pair.cdr = papa;
 
     if (VERB_SWITCH)
     {
         printf("ENV_NewEnv: Nouvel arrivant !\n");
         printf("%p\n", Ne );
     }
+    return (Ne);
 
 }
 
 
-void ENV_definir(char* Symbole, object Obj) /*Associe une chaine "Symbole" à un objet*/
+void ENV_definir(char* Symbole, object Obj, object EnvC ) /*Associe une chaine "Symbole" à un objet*/
 {
-    object Pt = ENV_TETE;
-
-    if ( ENV_est_defini(Symbole) )
+    if ( ENV_est_defini(Symbole, EnvC) )
     {
-        ENV_redefinir(Symbole, Obj);
+        ENV_redefinir(Symbole, Obj, EnvC);
     }
 
     else
     {
         /*se placer en queue du level*/
-        while(Car(Pt) != NULL)
+        while(Car(EnvC) != NULL)
         {
-            Pt = Car(Pt);
+            EnvC = Car(EnvC);
         }
 
         if (VERB_SWITCH)
-            printf("Definir %s %p\n", Symbole, Pt );
+            printf("Definir %s %p\n", Symbole, EnvC );
 
         /*Creer paire suite*/
         object St = ENV_maillon();
@@ -80,27 +79,32 @@ void ENV_definir(char* Symbole, object Obj) /*Associe une chaine "Symbole" à un
         St->this.pair.car = NULL;
         St->this.pair.cdr = Ht;
         /*Lien suite/suite*/
-        Pt->this.pair.car = St;
+        EnvC->this.pair.car = St;
     }
 }
 
 
-void ENV_redefinir(char* Symbole, object Obj) /*recherche puis change le car de l'hote mémoire*/
+void ENV_redefinir(char* Symbole, object Obj, object EnvC) /*recherche puis change le car de l'hote mémoire*/
 {
-    object Pt = ENV_TETE;
+    object Tete = EnvC;
     int i = 1;
-    while(Car(Pt) != NULL && i)
+    while(Tete != NULL)
     {
-        Pt = Car(Pt);
-
-        if( !strcmp( Cdr(Cdr(Pt))->this.symbol, Symbole) )
+        while(EnvC != NULL && Car(EnvC) != NULL && i)
         {
-            if (VERB_SWITCH)
-                printf("ENV_redefinir : %s trouvé\n", Symbole);
+            EnvC = Car(EnvC);
 
-            Pt->this.pair.cdr->this.pair.car = Obj;
-            i = 0;
+            if( !strcmp( Cdr(Cdr(EnvC))->this.symbol, Symbole) )
+            {
+                if (VERB_SWITCH)
+                    printf("ENV_redefinir : %s trouvé\n", Symbole);
+
+                EnvC->this.pair.cdr->this.pair.car = Obj;
+                i = 0;
+            }
         }
+        Tete = Cdr(Tete);
+        EnvC = Tete;
     }
 
     if(VERB_SWITCH && i)
@@ -108,49 +112,57 @@ void ENV_redefinir(char* Symbole, object Obj) /*recherche puis change le car de 
 }
 
 
-int ENV_est_defini(char* Symbole) /*Renvoie 1 si la chaîne Symbole est deja affectée 0 sinon*/
+int ENV_est_defini(char* Symbole, object EnvC) /*Renvoie 1 si la chaîne Symbole est deja affectée 0 sinon*/
 {
-    object Pt = ENV_TETE;
-
-    while(Car(Pt) != NULL)
+    object Tete = EnvC;
+    while( Tete != NULL)
     {
-        Pt = Car(Pt);
-
-        if( !strcmp( Cdr(Cdr(Pt))->this.symbol, Symbole) )
+        while(Car(EnvC) != NULL)
         {
-            if (VERB_SWITCH)
-                printf("ENV_est_defini : %s est défini\n", Symbole);
+            EnvC = Car(EnvC);
 
-            return (1);
+            if( !strcmp( Cdr(Cdr(EnvC))->this.symbol, Symbole) )
+            {
+                if (VERB_SWITCH)
+                    printf("ENV_est_defini : %s est défini\n", Symbole);
+
+                return (1);
+            }
         }
+        Tete = Cdr(Tete);
+        EnvC = Tete;
     }
-
     if (VERB_SWITCH)
         printf(" %s pas défini\n", Symbole);
 
     return(0);
 }
 
-object ENV_chercher( char* Symbole ) /*Renvoie l'objet associé à la chaîne Symbole s'il existe et NULL sinon*/
+object ENV_chercher( char* Symbole, object EnvC ) /*Renvoie l'objet associé à la chaîne Symbole s'il existe et NULL sinon*/
 {
-    object Pt = ENV_TETE;
-
-    while(Car(Pt) != NULL)
+    object Tete = EnvC;
+    while( Tete != NULL )
     {
-        Pt = Car(Pt);
 
-        if( !strcmp( Cdr(Cdr(Pt))->this.symbol, Symbole) )
+        while(Car(EnvC) != NULL)
         {
-            if (VERB_SWITCH)
-                printf("ENV_chercher : %s trouvé\n", Symbole);
+            EnvC = Car(EnvC);
 
-            if ( Car(Cdr(Pt))->type == SFS_SYMBOL && ENV_chercher( Car(Cdr(Pt))->this.symbol ) != NULL )
+            if( !strcmp( Cdr(Cdr(EnvC))->this.symbol, Symbole) )
             {
-                return ( ENV_chercher( Car(Cdr(Pt))->this.symbol ) );
-            }
+                if (VERB_SWITCH)
+                    printf("ENV_chercher : %s trouvé\n", Symbole);
 
-            return (Car(Cdr(Pt)));
+                if ( Car(Cdr(EnvC))->type == SFS_SYMBOL && ENV_chercher( Car(Cdr(EnvC))->this.symbol ) != NULL )
+                {
+                    return ( ENV_chercher( Car(Cdr(EnvC))->this.symbol ) );
+                }
+
+                return (Car(Cdr(EnvC)));
+            }
         }
+        Tete = Cdr(Tete);
+        EnvC = Tete;
     }
 
     if(VERB_SWITCH)
@@ -239,14 +251,18 @@ void ENV_purifier() /*libère l'environement en supprimant toutes les variables 
 
 }
 
-void ENV_List() /*Liste les variables déclarées dans l'environnement*/
+void ENV_List( EnvC ) /*Liste les variables déclarées dans l'environnement*/
 {
-    object Pt = ENV_TETE;
-
-    while(Car(Pt) != NULL)
+    object Tete = EnvC;
+    while( Tete != NULL )
     {
-        printf("%s\n",Cdr(Cdr(Car(Pt)))->this.symbol );
-        Pt = Car(Pt);
+        while(Car(EnvC) != NULL)
+        {
+            printf("%s\n",Cdr(Cdr(Car(EnvC)))->this.symbol );
+            EnvC = Car(EnvC);
+        }
+        Tete = Cdr( Tete );
+        EnvC = Tete;
+        printf(">> ENV + 1 <<\n");
     }
-
 }

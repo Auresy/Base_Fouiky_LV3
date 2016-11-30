@@ -268,32 +268,36 @@ EVAL_in :
                 /* verif des args */
                 object ret1 = Cdr(input);
                 object ret2 = Car(input)->this.compound.param;
-                while ( ret1->type != SFS_PAIR && ret1->type != SFS_PAIR)
+                while ( ret1->type != SFS_PAIR && ret1->type != SFS_PAIR )
                 {
                     /* verifier que l'on a bien des paramètres formels (symbols) */
                     if ( ret1->type != SFS_SYMBOL )
                     {
-                         printf("Le premier argument de la forme lambda est un(des) paramètre(s) (symbol)");
+                        printf("Le premier argument d'un compound est un(des) paramètre(s) (symbol)");
                         return NULL;
                       }
                     ret2 = Cdr(ret2);
                     ret1 = Cdr(ret1);
                 }
-
-            
-
+                if ( ret1->type == SFS_PAIR || ret1->type == SFS_PAIR )
+                {
+                    printf("Le compound n'a pas le bon nombre d'arguments");
+                    return NULL;
+                }
                 /* création d'un environnement local */
+                ENV_NewEnv( ENV_TETE );
 
                 /* association de l'évaluation du paramètre effectif au paramètre formel */
-                object ret_param_form = Car(Cdr(Car(input)));
+                object ret_param_form = Car(input)->this.compound.param;
                 object ret_param_eff = Cdr(input);
                     while ( ret_param_form->type != SFS_PAIR && ret_param_eff->type != SFS_PAIR)
                     {
-                        ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff)); /* a modifier avec l'ENV*/
+                        ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff)); /* à modifier avec l'ENV*/
                         ret_param_form = Cdr(ret_param_form);
                         ret_param_eff = Cdr(ret_param_eff);
                     }
                 /* exec du corps de la fonction */
+                return sfs_eval( Car(input)->this.compound.body );
 
                 printf("Il manque des arguments a la forme lambda\n");
                 return(NULL);
