@@ -233,13 +233,13 @@ int main ( int argc, char *argv[] )
 
         if (strcmp(input, "LISTVAR") == 0)
         {
-            ENV_List();
+            ENV_List( ENV_TETE );
             continue;
         }
 
         if (strcmp(input, "DELVAR") == 0)
         {
-            ENV_supprimer( Cdr(Cdr(Car(ENV_TETE)))->this.symbol );
+            ENV_supprimer( Cdr(Cdr(Car(ENV_TETE)))->this.symbol, ENV_TETE );
             continue;
         }
 

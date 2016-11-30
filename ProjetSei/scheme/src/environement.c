@@ -153,9 +153,9 @@ object ENV_chercher( char* Symbole, object EnvC ) /*Renvoie l'objet associé à 
                 if (VERB_SWITCH)
                     printf("ENV_chercher : %s trouvé\n", Symbole);
 
-                if ( Car(Cdr(EnvC))->type == SFS_SYMBOL && ENV_chercher( Car(Cdr(EnvC))->this.symbol ) != NULL )
+                if ( Car(Cdr(EnvC))->type == SFS_SYMBOL && ENV_chercher( Car(Cdr(EnvC))->this.symbol, EnvC ) != NULL )
                 {
-                    return ( ENV_chercher( Car(Cdr(EnvC))->this.symbol ) );
+                    return ( ENV_chercher( Car(Cdr(EnvC))->this.symbol, EnvC ) );
                 }
 
                 return (Car(Cdr(EnvC)));
@@ -175,9 +175,9 @@ object ENV_chercher( char* Symbole, object EnvC ) /*Renvoie l'objet associé à 
 }
 
 
-void ENV_supprimer(char* Symbole) /*Supprime et libère la memoire pour le symbole donné en liant la chaine*/
+void ENV_supprimer(char* Symbole, object EnvC) /*Supprime et libère la memoire pour le symbole donné en liant la chaine*/
 {
-    if( !ENV_est_defini(Symbole) )
+    if( !ENV_est_defini(Symbole, EnvC) )
     {
         if(VERB_SWITCH)
             printf("ENV_supprimer : Aucun symbole de ce nom\n");
@@ -228,6 +228,7 @@ void ENV_supprimer(char* Symbole) /*Supprime et libère la memoire pour le symbo
 
 void ENV_purifier() /*libère l'environement en supprimant toutes les variables puis en detruisant la tête*/
 {
+    object EnvC = ENV_TETE;
     printf("ENV_purifier : Purifier HS\n");
     
     if (0)
@@ -238,7 +239,7 @@ void ENV_purifier() /*libère l'environement en supprimant toutes les variables 
 
     while(Car(Pt) != NULL)
     {
-        ENV_supprimer( Cdr(Cdr(Car(Pt)))->this.symbol );
+        ENV_supprimer( Cdr(Cdr(Car(Pt)))->this.symbol, EnvC );
         /*printf("%s Supprimé\n");*/
     }
 
@@ -251,7 +252,7 @@ void ENV_purifier() /*libère l'environement en supprimant toutes les variables 
 
 }
 
-void ENV_List( EnvC ) /*Liste les variables déclarées dans l'environnement*/
+void ENV_List( object EnvC ) /*Liste les variables déclarées dans l'environnement*/
 {
     object Tete = EnvC;
     while( Tete != NULL )

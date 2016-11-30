@@ -33,6 +33,8 @@ object sfs_eval_Prim( object input )
 
 object sfs_eval( object input )
 {
+    object EnvC = ENV_TETE;
+
     /*
      Mise en mémoire de input d'origine pour ne pas perdre la tête :p
         object Tempi = input;
@@ -56,14 +58,14 @@ EVAL_in :
             /*Cas_Primitives  */
             if ( Car(input)->type == SFS_SYMBOL )
             {
-                object Temp1 = ENV_chercher(Car(input)->this.symbol);
+                object Temp1 = ENV_chercher(Car(input)->this.symbol, EnvC);
 
                 if ( Temp1 != NULL && Temp1->type == SFS_PRIMITIVE )
                 {
                     return( Temp1->this.primitive.fonction( sfs_eval_Prim ( Cdr(input)) ) );
                 }
                 if (Temp1 != NULL)
-                Temp1 = ENV_chercher( sfs_eval( Car(input) )->this.symbol );
+                Temp1 = ENV_chercher( sfs_eval( Car(input))->this.symbol, EnvC );
 
                 if ( Temp1 != NULL && Temp1->type == SFS_PRIMITIVE )
                 {
@@ -92,7 +94,7 @@ EVAL_in :
                     return(NULL);
                 }
 
-                if ( !strcmp(Car(input)->this.symbol, "set!") && !ENV_est_defini(Car(Cdr(input))->this.symbol) )
+                if ( !strcmp(Car(input)->this.symbol, "set!") && !ENV_est_defini(Car(Cdr(input))->this.symbol, EnvC) )
                 {
                     printf("ERREUR sfs_eval : Type, Une variable non définie ne peut être set!\n");
                 return(NULL);
@@ -100,7 +102,7 @@ EVAL_in :
 
                 else
                 {
-                    ENV_definir( Car(Cdr(input))->this.symbol, Car(Cdr(Cdr(input))) );
+                    ENV_definir( Car(Cdr(input))->this.symbol, Car(Cdr(Cdr(input))), EnvC );
                     /* Consigne de retour pas précise pour set! et define, on renvoie le symbole */
                     return(Car(Cdr(input)));
                 }
@@ -292,7 +294,7 @@ EVAL_in :
                 object ret_param_eff = Cdr(input);
                     while ( ret_param_form->type != SFS_PAIR && ret_param_eff->type != SFS_PAIR)
                     {
-                        ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff)); /* à modifier avec l'ENV*/
+                        ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff), EnvC); /* à modifier avec l'ENV*/
                         ret_param_form = Cdr(ret_param_form);
                         ret_param_eff = Cdr(ret_param_eff);
                     }
@@ -314,7 +316,7 @@ EVAL_in :
         case SFS_SYMBOL :
         {
 
-            object Obj1 = ENV_chercher(input->this.symbol);
+            object Obj1 = ENV_chercher(input->this.symbol, EnvC);
 
             if(Obj1 == NULL)
             {
