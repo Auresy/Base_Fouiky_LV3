@@ -5,92 +5,96 @@
 
 #include <stdlib.h>
 
+extern object ENV_TETE;
+
 /* Creation des objets primitives et intégration au Top level. */
 void creation_librairie(void)
 {
+    object EnvC = ENV_TETE;
+
     object t;
     t=make_primitive( add );
-    ENV_definir("+", t);
+    ENV_definir("+", t, EnvC);
 
     t=make_primitive( sub );
-    ENV_definir("-", t);
+    ENV_definir("-", t, EnvC);
 
     t=make_primitive( multiplie );
-    ENV_definir("*", t);
+    ENV_definir("*", t, EnvC);
 
     t=make_primitive( quotient );
-    ENV_definir("quotient", t);
+    ENV_definir("quotient", t, EnvC);
 
     t=make_primitive( remainder );
-    ENV_definir("remainder", t);
+    ENV_definir("remainder", t, EnvC);
 
     t=make_primitive( equal );
-    ENV_definir("=", t);
+    ENV_definir("=", t, EnvC);
 
     t=make_primitive( sup );
-    ENV_definir("<", t);
+    ENV_definir("<", t, EnvC);
 
     t=make_primitive( inf );
-    ENV_definir(">", t);
+    ENV_definir(">", t, EnvC);
 
     t=make_primitive( predicatnull );
-    ENV_definir("null?", t);
+    ENV_definir("null?", t, EnvC);
 
     t=make_primitive( predicatboolean );
-    ENV_definir("boolean?", t);
+    ENV_definir("boolean?", t, EnvC);
 
     t=make_primitive( predicatsymbol );
-    ENV_definir("symbol?", t);
+    ENV_definir("symbol?", t, EnvC);
 
     t=make_primitive( predicatinteger );
-    ENV_definir("integer?", t);
+    ENV_definir("integer?", t, EnvC);
 
     t=make_primitive( predicatchar );
-    ENV_definir("char?", t);
+    ENV_definir("char?", t, EnvC);
 
     t=make_primitive( predicatstring );
-    ENV_definir("string?", t);
+    ENV_definir("string?", t, EnvC);
 
     t=make_primitive( predicatpair );
-    ENV_definir("pair?", t);
+    ENV_definir("pair?", t, EnvC);
 
     t=make_primitive( predicatprocedure );
-    ENV_definir("procedure?", t);
+    ENV_definir("procedure?", t, EnvC);
 
     t=make_primitive( predicatequal );
-    ENV_definir("eq?", t);
+    ENV_definir("eq?", t, EnvC);
 
     t=make_primitive( cons );
-    ENV_definir("cons", t);
+    ENV_definir("cons", t, EnvC);
 
     t=make_primitive( primitivecar );
-    ENV_definir("car", t);
+    ENV_definir("car", t, EnvC);
 
     t=make_primitive( primitivecdr );
-    ENV_definir("cdr", t);
+    ENV_definir("cdr", t, EnvC);
 
     t=make_primitive( setcar );
-    ENV_definir("set-car!", t);
+    ENV_definir("set-car!", t, EnvC);
 
     t=make_primitive( setcdr );
-    ENV_definir("set-cdr!", t);
+    ENV_definir("set-cdr!", t, EnvC);
 
     t=make_primitive( list );
-    ENV_definir("list", t);
+    ENV_definir("list", t, EnvC);
 
     /*FouinyBaby*/
 
     t=make_primitive( qtype );
-    ENV_definir("type", t);
+    ENV_definir("type", t, EnvC);
 
     t=make_primitive( charToint );
-    ENV_definir("char->integer", t);
+    ENV_definir("char->integer", t, EnvC);
 
     t=make_primitive( intTochar );
-    ENV_definir("integer->char", t);
+    ENV_definir("integer->char", t, EnvC);
 
     t=make_primitive( numTostring );
-    ENV_definir("number->string", t);
+    ENV_definir("number->string", t, EnvC);
 
 /*      t=make_primitive( stringTonum );
         ENV_definir("string->number", t);
