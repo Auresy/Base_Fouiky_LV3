@@ -62,14 +62,7 @@ EVAL_in :
                 {
                     return( Temp1->this.primitive.fonction( sfs_eval_Prim ( Cdr(input), EnvC ) ) );
                 }
-                /*if (Temp1 != NULL)
-                Temp1 = ENV_chercher( sfs_eval( Car(input))->this.symbol, EnvC );
-
-                if ( Temp1 != NULL && Temp1->type == SFS_PRIMITIVE )
-                {
-                    return( Temp1->this.primitive.fonction(sfs_eval_Prim( Cdr(input) ) ) );
-                }
-                */
+                
                 /* Cas compound */
 
                 if (Temp1 != NULL && Temp1->type == SFS_COMPOUND)

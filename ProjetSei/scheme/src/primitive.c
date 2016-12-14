@@ -113,12 +113,12 @@ object add(object input)
 
     /* verifications*/
     object verif=input;
-
+    if (verif == NULL) return NULL;
     if (verif->type == SFS_INTEGER) return verif;
 
     do
     {
-        if (verif->type != SFS_PAIR || Car(verif)->type != SFS_INTEGER )
+        if ( verif->type != SFS_PAIR || Car(verif)->type != SFS_INTEGER )
         {
             printf("Entier attendu \n");
             return NULL;

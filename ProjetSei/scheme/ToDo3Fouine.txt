@@ -257,7 +257,16 @@ Liv 4 :
 	> ...
 
 0	> verif define
-0	> TESTS
+0	> TESTS :
+		> define
+		> begin
+		> lambda
+		> let
+		> procedure?
+		> map
+		> factorielle
+		> compteur
+		
 0	> Map
 
 ***
