@@ -18,8 +18,8 @@ extern "C" {
 
 #include "object.h"
 
-object sfs_eval_Prim( object input );
-object sfs_eval( object );
+object sfs_eval_Prim( object input, object EnvC );
+object sfs_eval( object input, object EnvC );
 
 #ifdef __cplusplus
 }

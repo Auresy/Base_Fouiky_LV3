@@ -758,7 +758,7 @@ object list(object input)
 object qtype (object input)
 {
     printf("\nSFS_INTEGER      0x00\nSFS_CHARACTER    0x01\nSFS_STRING       0x02\nSFS_PAIR         0x03\nSFS_NIL          0x04\nSFS_BOOLEAN      0x05\nSFS_SYMBOL       0x06\nSFS_PRIMITIVE    0x07\nSFS_COMPOUND     0x08\n");
-    printf("\n          %d\n\n", sfs_eval( Car(input) )->type );
+    printf("\n          %d\n\n", sfs_eval( Car(input), ENV_TETE )->type );
     return(input);
 }
 

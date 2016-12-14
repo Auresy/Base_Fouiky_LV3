@@ -259,7 +259,7 @@ int main ( int argc, char *argv[] )
             continue ;
         }
 
-        output = sfs_eval( sexpr );
+        output = sfs_eval( sexpr, ENV_TETE );
 
         if( NULL == output)
         {

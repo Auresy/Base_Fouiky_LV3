@@ -229,6 +229,7 @@ void ENV_supprimer(char* Symbole, object EnvC) /*Supprime et libère la memoire 
 void ENV_purifier() /*libère l'environement en supprimant toutes les variables puis en detruisant la tête*/
 {
     object EnvC = ENV_TETE;
+    if ( VERB_SWITCH )
     printf("ENV_purifier : Purifier HS\n");
     
     if (0)

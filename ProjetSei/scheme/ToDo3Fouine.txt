@@ -245,16 +245,19 @@ Liv 3 :
 1	> eq? (egalité object meme evalué)
 0	> Primtives Type
 Liv 4 :
-0 	> READ_Primitive
-0	> READ_Compound
-0	> Modif environements :
+0 	> PRINT_Primitive
+1	> PRINT_Compound
+1	> Modif environements :
 		>> object (pair) ENV_Creer(object Papa)
 		>> Variable dans eval (env en cours)
 		>> MAJ Env_chercher / définir etc ... (aller chercher dans l'env )
 0	> Define à MAJ
-0	> Begin
+1	> Begin
 0	> Ramasse miettes
 	> ...
 
+0	> verif define
+0	> TESTS
+0	> Map
 
 ***
