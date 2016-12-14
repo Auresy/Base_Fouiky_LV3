@@ -62,50 +62,15 @@ EVAL_in :
                 {
                     return( Temp1->this.primitive.fonction( sfs_eval_Prim ( Cdr(input), EnvC ) ) );
                 }
-                
-                /* Cas compound */
+                /*if (Temp1 != NULL)
+                Temp1 = ENV_chercher( sfs_eval( Car(input))->this.symbol, EnvC );
 
-                if (Temp1 != NULL && Temp1->type == SFS_COMPOUND)
+                if ( Temp1 != NULL && Temp1->type == SFS_PRIMITIVE )
                 {
-                    printf("hum..");
-                    /* verif des args */
-                    object ret1 = Cdr(input);
-                    object ret2 = Car(input)->this.compound.param;
-                    while ( ret1->type == SFS_PAIR && ret1->type == SFS_PAIR )
-                    {
-                        /* verifier que l'on a bien des paramètres formels (symbols) */
-                        if ( Car(ret2)->type != SFS_SYMBOL )
-                        {
-                            printf("Le premier argument d'un compound est un(des) paramètre(s) (symbol)");
-                            return NULL;
-                          }
-                        ret2 = Cdr(ret2);
-                        ret1 = Cdr(ret1);
-                    }
-                    if ( ret1->type == SFS_PAIR || ret1->type == SFS_PAIR )
-                    {
-                        printf("Le compound n'a pas le bon nombre d'arguments");
-                        return NULL;
-                    }
-                    /* création d'un environnement local */
-                    object EnvN;
-                    EnvN=ENV_NewEnv( ENV_TETE );
-
-                    /* association de l'évaluation du paramètre effectif au paramètre formel */
-                    object ret_param_form = Car(input)->this.compound.param;
-                    object ret_param_eff = Cdr(input);
-                        while ( ret_param_form->type != SFS_PAIR && ret_param_eff->type != SFS_PAIR)
-                        {
-                            ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff), EnvN); /* à modifier avec l'ENV*/
-                            ret_param_form = Cdr(ret_param_form);
-                            ret_param_eff = Cdr(ret_param_eff);
-                        }
-                    /* exec du corps de la fonction */
-                    return sfs_eval( Car(input)->this.compound.body, EnvN );
-
-                    printf("Il manque des arguments a la forme lambda\n");
-                    return(NULL);
+                    return( Temp1->this.primitive.fonction(sfs_eval_Prim( Cdr(input) ) ) );
                 }
+                */
+
             }
 
              /* cas Quote ou ' */
@@ -285,61 +250,63 @@ EVAL_in :
                 }
                 return ret;
             }
-            /* cas lambda */
+            /* cas lambda : on crée un compound */
             if( !strcmp(Car(input)->this.symbol, "lambda") )
             {
                 /* création d'un coumpound */
                 return make_compound( Car(Cdr(input)), Car(Cdr(Cdr(input))), EnvC );
 
             }
-            /* Cas PAIR */
+            /* Cas PAIR : double pair donc un lambda compound*/
             if ( Car(input)->type == SFS_PAIR )
             {
-                object t = sfs_eval( Car(input), EnvC );
-                object t2 = sfs_eval( Cdr(input), EnvC );
-                return sfs_eval(make_pair(t, t2), EnvC );
-            }
-            /* Cas compound */
-            if ( Car(input)->type == SFS_COMPOUND)
-            {
+                object compound = sfs_eval( Car(input), EnvC );
+                object param = Cdr(input);
+                object t=make_pair(compound, param);
+
                 /* verif des args */
-                object ret1 = Cdr(input);
-                object ret2 = Car(input)->this.compound.param;
-                while ( ret1->type != SFS_PAIR && ret1->type != SFS_PAIR )
+                object list_param_eff = Cdr(t);
+                object list_param_form = Car(t)->this.compound.param;
+                while ( list_param_form->type == SFS_PAIR && list_param_eff->type == SFS_PAIR )
                 {
                     /* verifier que l'on a bien des paramètres formels (symbols) */
-                    if ( ret1->type != SFS_SYMBOL )
+                    if ( Car(list_param_form)->type != SFS_SYMBOL )
                     {
-                        printf("Le premier argument d'un compound est un(des) paramètre(s) (symbol)");
+                        printf("Le premier argument d'un compound est un(des) paramètre(s) (symbol)\n");
                         return NULL;
-                      }
-                    ret2 = Cdr(ret2);
-                    ret1 = Cdr(ret1);
+                    }
+                    list_param_eff = Cdr(list_param_eff);
+                    list_param_form = Cdr(list_param_form);
                 }
-                if ( ret1->type == SFS_PAIR || ret1->type == SFS_PAIR )
+                if ( list_param_form->type == SFS_PAIR || list_param_eff->type == SFS_PAIR )
                 {
-                    printf("Le compound n'a pas le bon nombre d'arguments");
+                    printf("Le compound n'a pas le bon nombre d'arguments\n");
                     return NULL;
                 }
+
                 /* création d'un environnement local */
-               object EnvN;
-               EnvN=ENV_NewEnv( ENV_TETE );
+                object EnvN;
+                EnvN=ENV_NewEnv( ENV_TETE );
+
 
                 /* association de l'évaluation du paramètre effectif au paramètre formel */
-                object ret_param_form = Car(input)->this.compound.param;
-                object ret_param_eff = Cdr(input);
+                object ret_param_form = Car(t)->this.compound.param;
+                object ret_param_eff = Cdr(t);
                     while ( ret_param_form->type != SFS_PAIR && ret_param_eff->type != SFS_PAIR)
                     {
-                        ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff), EnvN); /* à modifier avec l'ENV*/
+                        ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff), EnvN); 
                         ret_param_form = Cdr(ret_param_form);
                         ret_param_eff = Cdr(ret_param_eff);
                     }
+
                 /* exec du corps de la fonction */
-                return sfs_eval( Car(input)->this.compound.body, EnvN );
+                return sfs_eval( Car(t)->this.compound.body, EnvN );
 
                 printf("Il manque des arguments a la forme lambda\n");
                 return(NULL);
             }
+            
+            
             printf("SFS_PAIR : Eval, Commande introuvable\n");
             return(NULL);
             break;

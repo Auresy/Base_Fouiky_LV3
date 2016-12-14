@@ -47,6 +47,10 @@ void sfs_print_atom( object o )
             printf("<#procédure>");
             break;
 
+        case SFS_PRIMITIVE :
+            printf("<#fonction>");
+            break;
+
         default :
             printf("ERREUR sfs_print_atom, l'élément à afficher n'est pas un ATOME !\n");
             exit( EXIT_FAILURE );
