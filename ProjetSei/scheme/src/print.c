@@ -43,6 +43,10 @@ void sfs_print_atom( object o )
             printf("%s",o->this.symbol);
             break;
 
+        case SFS_COMPOUND :
+            printf("<#procédure>");
+            break;
+
         default :
             printf("ERREUR sfs_print_atom, l'élément à afficher n'est pas un ATOME !\n");
             exit( EXIT_FAILURE );
