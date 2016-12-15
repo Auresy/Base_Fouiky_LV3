@@ -269,11 +269,11 @@ Liv 4 :
 		
 0	> Map
 
-lambda 				F
-Let 				M
-map ?				F
-procedures			F
-procedure ?			M
-define oldschool	F
+lambda 				F 1/0
+Let 				M 1
+map ?				F 0?
+procedures			F 0
+procedure ?			M 1
+define oldschool	F 1
 
 ***

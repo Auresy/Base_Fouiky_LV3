@@ -96,9 +96,9 @@ void creation_librairie(void)
     t=make_primitive( numTostring );
     ENV_definir("number->string", t, EnvC);
 
-/*      t=make_primitive( stringTonum );
-        ENV_definir("string->number", t);
-
+    t=make_primitive( stringTonum );
+    ENV_definir("string->number", t, EnvC);
+/*
         t=make_primitive( symbolTostring );
         ENV_definir("symbol->string", t);
 
@@ -806,7 +806,7 @@ object numTostring(object input)
     }
 }
 
-/*
+
 object stringTonum(object input)
 {
     if ( Car(input)->type != SFS_STRING )
@@ -816,12 +816,18 @@ object stringTonum(object input)
 
     else
     {
-        
-        return(  );
+        int a = atol( Car(input)->this.string );
+
+        if(a == 0)
+        {
+            printf("String->Number : Ceci n'est pas un nombre\n");
+            return (NULL);
+        }
+        return( make_integer(a) );
     }
 }
 
-
+/*
 object symbolTostring(object input)
 {
     if ( Car(input)->type != SFS_INTEGER )
