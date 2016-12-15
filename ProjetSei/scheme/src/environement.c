@@ -146,6 +146,7 @@ int ENV_est_defini(char* Symbole, object EnvC) /*Renvoie 1 si la chaîne Symbole
 object ENV_chercher( char* Symbole, object EnvC ) /*Renvoie l'objet associé à la chaîne Symbole s'il existe et NULL sinon*/
 {
     object Tete = EnvC;
+    int Fin = 1;
     if(VERB_SWITCH)
     {
         if(EnvC != ENV_TETE)
@@ -175,13 +176,15 @@ object ENV_chercher( char* Symbole, object EnvC ) /*Renvoie l'objet associé à 
         }
         Tete = Cdr(Tete);
         EnvC = Tete;
-        if( Tete != ENV_TETE && VERB_SWITCH )
+        if( VERB_SWITCH && Fin )
         {
             if(EnvC != ENV_TETE)
             printf("ENV_Chercher : ENV ++ %p ++ (TL = %p)\n", EnvC, ENV_TETE );
             if(EnvC == ENV_TETE)
+            {
             printf("ENV_Chercher : ENV ++ TOP_LV ++ (TL = %p)\n", ENV_TETE );
-        
+            Fin = 0;
+            }
         }
     }
 

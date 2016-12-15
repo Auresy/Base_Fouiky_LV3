@@ -330,7 +330,7 @@ EVAL_in :
                 /* association de l'évaluation du paramètre effectif au paramètre formel */
                 object ret_param_form = Car(t)->this.compound.param;
                 object ret_param_eff = Cdr(t);
-                    while ( ret_param_form->type != SFS_PAIR && ret_param_eff->type != SFS_PAIR)
+                    while ( ret_param_form->type == SFS_PAIR && ret_param_eff->type == SFS_PAIR)
                     {
                         ENV_definir( Car(ret_param_form)->this.symbol, Car(ret_param_eff), EnvN); 
                         ret_param_form = Cdr(ret_param_form);
@@ -389,6 +389,10 @@ EVAL_in :
             return(input);
 
         case SFS_STRING :
+            /*Auto-evaluant*/
+            return(input);
+            
+        case SFS_COMPOUND :
             /*Auto-evaluant*/
             return(input);
 
