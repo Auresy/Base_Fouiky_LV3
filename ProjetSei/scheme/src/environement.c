@@ -35,7 +35,7 @@ void ENV_init() /*Initialise les variables d'environement SCHEME et la globale o
 
 }
 
-object ENV_NewEnv(object papa) /*Prépare un nouvel environnement qui pointe vers son papa*/
+object ENV_NewEnv(object papa) /*Prépare un nouvel environnement qui pointe vers son papa depuis une tête donnée*/
 {
     object Ne = ENV_maillon();
     Ne->this.pair.cdr = papa;
@@ -52,6 +52,7 @@ object ENV_NewEnv(object papa) /*Prépare un nouvel environnement qui pointe ver
 
 void ENV_definir(char* Symbole, object Obj, object EnvC ) /*Associe une chaine "Symbole" à un objet*/
 {
+    object HEAD = EnvC;
     if ( ENV_est_defini(Symbole, EnvC) )
     {
         ENV_redefinir(Symbole, Obj, EnvC);
@@ -66,8 +67,12 @@ void ENV_definir(char* Symbole, object Obj, object EnvC ) /*Associe une chaine "
         }
 
         if (VERB_SWITCH)
-            printf("Definir %s %p\n", Symbole, EnvC );
-
+        {
+            if(HEAD != ENV_TETE)
+            printf("Definir : %s dans Env %p @ %p \n", Symbole, HEAD, EnvC  );
+            if(HEAD == ENV_TETE)
+            printf("Definir : %s dans TopL_Env %p @ %p \n", Symbole, HEAD, EnvC  );
+        }
         /*Creer paire suite*/
         object St = ENV_maillon();
         /*Creer paire hôte*/
@@ -141,6 +146,13 @@ int ENV_est_defini(char* Symbole, object EnvC) /*Renvoie 1 si la chaîne Symbole
 object ENV_chercher( char* Symbole, object EnvC ) /*Renvoie l'objet associé à la chaîne Symbole s'il existe et NULL sinon*/
 {
     object Tete = EnvC;
+    if(VERB_SWITCH)
+    {
+        if(EnvC != ENV_TETE)
+        printf("recherche de %s dans ENV %p (TL = %p)\n", Symbole, EnvC, ENV_TETE );
+        if(EnvC == ENV_TETE)
+        printf("recherche de %s dans TopL_ENV (TL = %p)\n", Symbole, ENV_TETE );
+    }
     while( Tete != NULL )
     {
 
@@ -151,7 +163,7 @@ object ENV_chercher( char* Symbole, object EnvC ) /*Renvoie l'objet associé à 
             if( !strcmp( Cdr(Cdr(EnvC))->this.symbol, Symbole) )
             {
                 if (VERB_SWITCH)
-                    printf("ENV_chercher : %s trouvé\n", Symbole);
+                    printf("ENV_chercher : '%s' trouvé @ %p\n", Symbole, EnvC);
 
                 if ( Car(Cdr(EnvC))->type == SFS_SYMBOL && ENV_chercher( Car(Cdr(EnvC))->this.symbol, EnvC ) != NULL )
                 {
@@ -163,10 +175,18 @@ object ENV_chercher( char* Symbole, object EnvC ) /*Renvoie l'objet associé à 
         }
         Tete = Cdr(Tete);
         EnvC = Tete;
+        if( Tete != ENV_TETE && VERB_SWITCH )
+        {
+            if(EnvC != ENV_TETE)
+            printf("ENV_Chercher : ENV ++ %p ++ (TL = %p)\n", EnvC, ENV_TETE );
+            if(EnvC == ENV_TETE)
+            printf("ENV_Chercher : ENV ++ TOP_LV ++ (TL = %p)\n", ENV_TETE );
+        
+        }
     }
 
     if(VERB_SWITCH)
-        printf("ENV_chercher : %s pas trouvé\n", Symbole);
+        printf("ENV_chercher : '%s' pas trouvé\n", Symbole);
 
     /*printf("ERREUR ENV_chercher, recherche infructueuse\n");
     exit( EXIT_FAILURE );*/

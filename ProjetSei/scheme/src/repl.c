@@ -40,7 +40,7 @@ object F;
 object ENV_TETE;
 
 /* controle de la verbosité 1 = SPAM ou 0 = Je fais des test d'erreur tranquillou*/
-int VERB_SWITCH =0;
+int VERB_SWITCH =1;
 
 
 void init_interpreter ( void )

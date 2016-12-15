@@ -60,16 +60,13 @@ EVAL_in :
 
                 if ( Temp1 != NULL && Temp1->type == SFS_PRIMITIVE )
                 {
-                    return( Temp1->this.primitive.fonction( sfs_eval_Prim ( Cdr(input), EnvC ) ) );
+                    object ErrChk = sfs_eval_Prim ( Cdr(input), EnvC );
+                    if(ErrChk != NULL)
+                    {
+                        return( Temp1->this.primitive.fonction( sfs_eval_Prim ( Cdr(input), EnvC ) ) );
+                    }
+                    else return NULL;
                 }
-                /*if (Temp1 != NULL)
-                Temp1 = ENV_chercher( sfs_eval( Car(input))->this.symbol, EnvC );
-
-                if ( Temp1 != NULL && Temp1->type == SFS_PRIMITIVE )
-                {
-                    return( Temp1->this.primitive.fonction(sfs_eval_Prim( Cdr(input) ) ) );
-                }
-                */
 
             }
 
@@ -257,6 +254,45 @@ EVAL_in :
                 return make_compound( Car(Cdr(input)), Car(Cdr(Cdr(input))), EnvC );
 
             }
+            /* Cas LET : on transforme en lambda */
+            if( !strcmp(Car(input)->this.symbol, "let") )
+            {
+                if ( Cdr(input)->type == SFS_PAIR && Cdr(Cdr(input))->type == SFS_PAIR )
+                {
+                    object corps = Car(Cdr(Cdr(input)));
+
+                    object list_param_form=make_nil();
+                    object list_param_eff=make_nil();
+
+                    object list_arg = Car(Cdr(input));
+                    if ( list_arg->type == SFS_PAIR ) 
+                    {
+                        while ( list_arg->type == SFS_PAIR )
+                        {
+                            if ( Car(list_arg)->type == SFS_PAIR && Cdr(Car(list_arg))->type == SFS_PAIR )
+                            {
+                                list_param_form = make_pair( Car(Car(list_arg)), list_param_form );
+                                /*printf("%s\n", Car(list_param_form)->this.symbol );*/
+                                list_param_eff = make_pair( Car(Cdr(Car(list_arg))), list_param_eff );
+                                list_arg = Cdr(list_arg);
+                            }
+                            else 
+                            {
+                                printf("mauvaise synthaxe let");
+                                return NULL;
+                            }
+                        }
+                        object temp = make_pair( corps, make_nil() );
+                        temp = make_pair( list_param_form, temp );
+                        temp = make_pair( make_symbol("lambda"), temp);
+                        temp = make_pair( temp, list_param_eff );
+                        return sfs_eval(temp, EnvC);
+                    }
+                }
+                printf("mauvaise synthaxe let");
+                return NULL;
+                
+            }
             /* Cas PAIR : double pair donc un lambda compound*/
             if ( Car(input)->type == SFS_PAIR )
             {
@@ -272,6 +308,8 @@ EVAL_in :
                     /* verifier que l'on a bien des paramètres formels (symbols) */
                     if ( Car(list_param_form)->type != SFS_SYMBOL )
                     {
+                        /*printf("%d", Car(list_param_form)->type);
+                        printf("%d", Car(list_param_form)->this.integer);*/
                         printf("Le premier argument d'un compound est un(des) paramètre(s) (symbol)\n");
                         return NULL;
                     }
@@ -300,6 +338,8 @@ EVAL_in :
                     }
 
                 /* exec du corps de la fonction */
+
+                /*? EnvC = EnvN; ?*/
                 return sfs_eval( Car(t)->this.compound.body, EnvN );
 
                 printf("Il manque des arguments a la forme lambda\n");
@@ -325,7 +365,7 @@ EVAL_in :
             {
                 if (1)
                 {
-                    printf("SFS_SYMBOL : Erreur Variable non définie\n");
+                    printf("SFS_SYMBOL : Erreur Variable non définie  => %s\n", input->this.symbol);
                     return(NULL);
                 }
             }

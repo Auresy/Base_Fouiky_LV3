@@ -269,4 +269,11 @@ Liv 4 :
 		
 0	> Map
 
+lambda 				F
+Let 				M
+map ?				F
+procedures			F
+procedure ?			M
+define oldschool	F
+
 ***
